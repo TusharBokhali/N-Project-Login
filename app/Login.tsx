@@ -24,13 +24,12 @@ const Login = () => {
                     .then((res => {
                         if (res.data) {
                             Alert.alert("Successfully Login");
+                           
+                            
                             alert("Successfully Login");
                             navigation.navigate('Home');
                            (async function (){
-                           await AsyncStorage.setItem("User", JSON.stringify({
-                                "email": email,
-                                "password": password
-                            }))
+                           await AsyncStorage.setItem("User", JSON.stringify(res.data))
                            })();
                             setemail("")
                             setpassword("")

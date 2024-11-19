@@ -14,38 +14,7 @@ const Home = () => {
   const navigation = useNavigation();
   const Drawer = createDrawerNavigator();
   return (
-   <Drawer.Navigator initialRouteName='Home' drawerContent={props=>{
-  const {routeNames, index} = props.state;
-  const focused = routeNames[index];
-
-     
-     return 
-     (<DrawerContentScrollView {...props}>
-        <Text style={{textAlign:'center',fontWeight:'600',fontSize:18,}}>Menu</Text>
-        <DrawerItem label={'Home'} onPress={()=>props.navigation.navigate('Home')}
-          focused={focused === 'Home'}
-          activeBackgroundColor='orange'
-          inactiveBackgroundColor='gray'
-          inactiveTintColor='black'
-          activeTintColor='white'
-          />
-        <DrawerItem label={'Category'} onPress={()=>props.navigation.navigate('Category')}
-            focused={focused === 'Category'}
-          activeBackgroundColor='orange'
-          inactiveBackgroundColor='gray'
-          inactiveTintColor='black'
-          activeTintColor='white'
-          />
-        <DrawerItem label={'Question'} onPress={()=>props.navigation.navigate('Question')}
-          focused={focused === 'Question'}
-          activeBackgroundColor='orange'
-          inactiveBackgroundColor='#812323'
-          inactiveTintColor='black'
-          activeTintColor='white'
-          />
-      </DrawerContentScrollView>
-     );
-}}>
+      <Drawer.Navigator>
       <Drawer.Screen name='Home' component={ProfileInfo}/>
       <Drawer.Screen name='Category' component={Category}/>
       <Drawer.Screen name='Question' component={Question}/>
