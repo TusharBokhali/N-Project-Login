@@ -56,17 +56,17 @@ const Login = () => {
 
     return (
         <View style={styles.Back}>
-            <SafeAreaView style={[tw`flex`, styles.Back]}>
+            <SafeAreaView style={styles.Back}>
                 <View>
-                    <TouchableOpacity style={tw`bg-yellow-400 p-2 rounded-tr-2xl rounded-bl-2xl ml-4 w-10`} onPress={() => { navigation.goBack() }}>
-                        <AntDesign name="arrowleft" size={24} color="black" />
+                    <TouchableOpacity style={styles.BackBtn} onPress={() => { navigation.goBack() }}>
+                        <AntDesign name="arrowleft" size={24} color="black" style={{textAlign:'center',}}/>
                     </TouchableOpacity>
                     <View style={tw`flex-row justify-center`}>
                         <Image source={require('../assets/images/newcookie.png')} style={{ width: 200, height: 200 }} />
                     </View>
                 </View>
             </SafeAreaView>
-            <View style={[tw`flex-1 bg-white px-8 pt-8`, styles.Set]}>
+            <View style={styles.Set}>
                 <View style={{ marginTop: 8, }}>
                     <Text style={tw`text-gray-700 ml-4`}>Email Address</Text>
                     <TextInput style={[tw`p-4 bg-gray-100 text-gray-700  mb-3`, { borderRadius: 16, }]} value={email} onChangeText={setemail} placeholder='Enter Email' />
@@ -114,8 +114,9 @@ export default Login
 
 const styles = StyleSheet.create({
     Back: {
+        flex:1,
         backgroundColor: '#6262df',
-        paddingTop: 20,
+        // paddingTop: ,
     },
     Set: {
         width: '100%',
@@ -125,5 +126,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingLeft: 30,
         padding: 30,
+    },
+    BackBtn:{
+        // p-2 rounded-tr-2xl rounded-bl-2xl ml-4 w-10
+        backgroundColor:'#ffff00',
+        padding:2,
+        borderTopRightRadius:15,
+        borderBottomLeftRadius:15,
+        marginLeft:20,
+        width: 40,
+        height:40,
+        justifyContent:'center',
     }
 })

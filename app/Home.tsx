@@ -4,27 +4,52 @@ import tw from 'twrnc';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import ProfileInfo from './ProfileInfo';
+import Category from './Category';
+import Question from './Question';
+import { useNavigation } from '@react-navigation/native';
+
 const Home = () => {
+  const navigation = useNavigation();
+  const Drawer = createDrawerNavigator();
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'space-between',}}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-          <TouchableOpacity>
-            <Image source={{ uri: 'https://static.vecteezy.com/system/resources/thumbnails/000/439/863/small/Basic_Ui__28186_29.jpg' }} style={{ width: 50, height: 50, borderRadius: 50, }} />
-          </TouchableOpacity>
-          <View style={{ marginHorizontal: 15, }}>
-            <Text>Welcome</Text>
-            <Text>Harry!</Text>
-          </View>
-        </View>
-        <TouchableOpacity>
-        <Ionicons name="notifications" size={24} color="black" />   
-        </TouchableOpacity>
-      </View>
-      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, }}>
-        <Text style={{ fontSize: 32, }}>Home</Text>
-      </View>
-    </SafeAreaView>
+   <Drawer.Navigator initialRouteName='Home' drawerContent={props=>{
+  const {routeNames, index} = props.state;
+  const focused = routeNames[index];
+
+     
+     return 
+     (<DrawerContentScrollView {...props}>
+        <Text style={{textAlign:'center',fontWeight:'600',fontSize:18,}}>Menu</Text>
+        <DrawerItem label={'Home'} onPress={()=>props.navigation.navigate('Home')}
+          focused={focused === 'Home'}
+          activeBackgroundColor='orange'
+          inactiveBackgroundColor='gray'
+          inactiveTintColor='black'
+          activeTintColor='white'
+          />
+        <DrawerItem label={'Category'} onPress={()=>props.navigation.navigate('Category')}
+            focused={focused === 'Category'}
+          activeBackgroundColor='orange'
+          inactiveBackgroundColor='gray'
+          inactiveTintColor='black'
+          activeTintColor='white'
+          />
+        <DrawerItem label={'Question'} onPress={()=>props.navigation.navigate('Question')}
+          focused={focused === 'Question'}
+          activeBackgroundColor='orange'
+          inactiveBackgroundColor='#812323'
+          inactiveTintColor='black'
+          activeTintColor='white'
+          />
+      </DrawerContentScrollView>
+     );
+}}>
+      <Drawer.Screen name='Home' component={ProfileInfo}/>
+      <Drawer.Screen name='Category' component={Category}/>
+      <Drawer.Screen name='Question' component={Question}/>
+   </Drawer.Navigator>
   )
 }
 

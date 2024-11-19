@@ -26,9 +26,8 @@ export default function RootLayout() {
   const [user,setUser] = useState("");
   async function Data(){
     const res = await AsyncStorage.getItem("User")
-    const value = JSON.parse(res)
+    const value = res ? JSON.parse(res) : null;
     setUser(value)
-    
   }
   useEffect(()=>{
     Data();
@@ -36,8 +35,8 @@ export default function RootLayout() {
   
   return (
     <NavigationContainer independent={true}>
-      <StatusBar style='light' />
-      <Stack.Navigator initialRouteName={user!==null && user!=="" ? 'Home' : 'Welcome'}>
+      <StatusBar style='auto' />
+      <Stack.Navigator initialRouteName={(user!==null && user !== " ") ? 'Home' : 'Welcome'}>
         <Stack.Screen name="ProfileInfo" options={{ headerShown: false }} component={ProfileInfo} />
         <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
         <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
