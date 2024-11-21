@@ -6,6 +6,7 @@ import { style } from 'twrnc'
 export default function ProfileInfo() {
 
   const [data,setData] = useState("")
+  AsyncStorage.clear();
 
   const getData = async() =>{
     try {

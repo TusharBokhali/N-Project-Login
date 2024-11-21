@@ -7,8 +7,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import ProfileInfo from './ProfileInfo';
 import Category from './Category';
-import Question from './Question';
+import Question from './Addquestion';
 import { useNavigation } from '@react-navigation/native';
+import Addquestion from './Addquestion';
+import Questionans from './Questionans';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SubCategory from './SubCategory';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -17,7 +21,10 @@ const Home = () => {
       <Drawer.Navigator>
       <Drawer.Screen name='Home' component={ProfileInfo}/>
       <Drawer.Screen name='Category' component={Category}/>
-      <Drawer.Screen name='Question' component={Question}/>
+      <Drawer.Screen name='SubCategory' component={SubCategory}/>
+      <Drawer.Screen name='Add Question' component={Addquestion}/>
+      <Drawer.Screen name='Questionans' component={Questionans}/>
+      
    </Drawer.Navigator>
   )
 }
