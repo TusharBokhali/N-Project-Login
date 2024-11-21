@@ -12,6 +12,8 @@ export default function ProfileInfo() {
        const pro = await AsyncStorage.getItem('User');
        const Data = JSON.parse(pro || "");
        if(Data){
+        console.log(Data);
+        
          setData(Data)
         }
     } catch (error) {

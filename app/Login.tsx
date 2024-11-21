@@ -12,17 +12,19 @@ const Login = () => {
     const [password, setpassword] = useState("")
     const navigation = useNavigation();
 
-    const Logins = () => {
+    const Logins = async() => {
 
         try {
             if (email !== "" && password != "") {
 
-                axios.post('https://interviewhub-3ro7.onrender.com/admin/login', {
+              await  axios.post('https://interviewhub-3ro7.onrender.com/admin/login', {
                     "email": email,
                     "password": password
                 })
                     .then((res => {
                         if (res.data) {
+                            // console.log(res.data);
+                            
                             Alert.alert("Successfully Login");
                            
                             
