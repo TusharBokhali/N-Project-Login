@@ -5,16 +5,15 @@ import { style } from 'twrnc'
 
 export default function ProfileInfo() {
 
-  const [data,setData] = useState("")
-  AsyncStorage.clear();
+  const [datas,setData] = useState("")
+  
 
   const getData = async() =>{
     try {
        const pro = await AsyncStorage.getItem('User');
-       const Data = JSON.parse(pro || "");
+       const Data = JSON.parse(pro );
        if(Data){
-        console.log(Data);
-        
+          
          setData(Data)
         }
     } catch (error) {
@@ -35,8 +34,11 @@ export default function ProfileInfo() {
      </View>
       <View style={{marginTop:20}}>
           <Text style={{fontSize:18,}}>User Account:</Text>
-          <TextInput value={`Email: ${data.email}`} style={styles.Input}/>
-          <TextInput value={`Password: ${data.password}`} style={styles.Input}/>
+          {datas ? (
+              <TextInput value={`Email: ${datas.data.email}`} style={styles.Input}/>
+          ):''}
+          
+          <TextInput value={`Password: ******`} style={styles.Input}/>
           <TouchableOpacity style={styles.BTN}>
             <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Edit</Text>
           </TouchableOpacity>
