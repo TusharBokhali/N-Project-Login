@@ -6,7 +6,7 @@ export default function Loading() {
   return (
     <SafeAreaProvider>
     <SafeAreaView style={[styles.container, styles.horizontal]}>
-      <ActivityIndicator size="large" color="#00ff00" />
+      <ActivityIndicator size="large" color="#030303" />
     </SafeAreaView>
   </SafeAreaProvider>
   )

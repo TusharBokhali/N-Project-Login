@@ -7,26 +7,26 @@ export default function SubCategory() {
     <View style={styles.container}>
       <Text style={styles.Title}>Sub Category:</Text>
       <TextInput
-            placeholder="Type Comment"
-            // value={this.state.comment.value}
-            // onChangeText={value => this.onChangeComment(value)}
-            // onPress={() => this.uploadComment()}
-            multiline={true}
-            maxLength={200}
-            numberOfLines={5}
-          />
+        placeholder="Type Comment"
+        // value={this.state.comment.value}
+        // onChangeText={value => this.onChangeComment(value)}
+        // onPress={() => this.uploadComment()}
+        multiline={true}
+        maxLength={200}
+        numberOfLines={5}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        padding:15,
-    },
-    Title:{
-        fontSize:18,
-        fontWeight:'600',
+  container: {
+    flex: 1,
+    padding: 15,
+  },
+  Title: {
+    fontSize: 18,
+    fontWeight: '600',
 
-    }
+  }
 })
