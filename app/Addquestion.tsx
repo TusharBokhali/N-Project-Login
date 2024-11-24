@@ -10,11 +10,30 @@ export default function Addquestion() {
   const [question,setQuestions] = useState("");
   const [answer,setAnswer] = useState("");
   const [data,setData] = useState("")
+  const [value,setValue] = useState("")
 
-  const getQuestions = () =>{
+  const getValue = async()=>{
+      let Val = await AsyncStorage.getItem('ValueSub')
+      let ori = JSON.parse(Val)
+      setValue(ori)
+  }
+
+  useEffect(()=>{
+    getValue();
+  },[])
+
+  const setQuestionsFun = () =>{
     if(question!=="" && answer!==""){
       try {
-        axios.post('https://interviewhub-3ro7.onrender.com/questions/create')
+        axios.post('https://interviewhub-3ro7.onrender.com/questions/create',{
+          "questions" : question,
+          "answer" : answer,
+          "subcatagoryID" : "6621d6640666154d30bbd97b"
+        },{
+          'headers':{
+            "Authorization": ''
+          },
+        })
         
       } catch (error) {
         console.log(error);
@@ -25,29 +44,28 @@ export default function Addquestion() {
   }
 
 
-  const getData = async() =>{
-      try {
-        const pro = await AsyncStorage.getItem('User');
-        const Data = JSON.parse(pro || "");
-        if(Data){
-          setData(Data)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-  }
 
-  useEffect(()=>{
-    getData();
-  },[])
+
+  // const getData = async() =>{
+  //     try {
+  //       const pro = await AsyncStorage.getItem('User');
+  //       const Data = JSON.parse(pro || "");
+  //       if(Data){
+  //         setData(Data)
+  //       }
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  // }
 
   // useEffect(()=>{
-  //   getQuestions();
+  //   getData();
   // },[])
+
   return (
 
       <View style={styles.container}>
-        <Text style={{textAlign:'center',fontSize:18,fontWeight:'600',marginTop:10,}}>Questions:</Text>
+        <Text style={{textAlign:'center',fontSize:18,fontWeight:'600',marginTop:10,}}>{value}</Text>
           <View style={{marginVertical:10,}}>
               <Text style={{marginVertical:10}}>Question</Text>
               <TextInput placeholder='Enter Question' value={question} onChangeText={setQuestions} style={styles.Input}/>
@@ -56,7 +74,7 @@ export default function Addquestion() {
               <Text style={{marginVertical:10}}>Answer:</Text>
               <TextInput placeholder='Enter Answer' value={answer} onChangeText={setAnswer}  style={styles.Input}/>
           </View>
-          <TouchableOpacity style={styles.BTN} onPress={()=>getQuestions()}>
+          <TouchableOpacity style={styles.BTN} onPress={()=>setQuestionsFun()}>
             <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Add</Text>
           </TouchableOpacity>
       </View>

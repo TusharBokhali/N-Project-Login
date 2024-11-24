@@ -43,6 +43,7 @@ export default function ProfileInfo() {
             <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Edit</Text>
           </TouchableOpacity>
       </View>
+      
     </View>
   )
 }

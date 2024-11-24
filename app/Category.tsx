@@ -63,6 +63,7 @@ export default function Category() {
 
   const Categories = async () => {
 
+    
     try {
       axios.post('https://interviewhub-3ro7.onrender.com/catagory/create', {
         "catagoryName": New
@@ -93,8 +94,6 @@ export default function Category() {
     setCategorys(el.catagoryName)
     setDialogVisible(true)
   }
-
-  console.log("categorys", categorys);
 
 
   const Delete = (id) => {
@@ -180,7 +179,7 @@ export default function Category() {
             }).map((el, inx) => {
 
               return (
-                <View key={inx} style={{ flexDirection: 'row', width: '99%', justifyContent: 'space-between', alignItems: 'center', }}>
+                <View key={inx} style={[styles.Build,{ flexDirection: 'row', width: '99%', justifyContent: 'space-between', alignItems: 'center', }]}>
                   <Text style={styles.TextCate}>{`${inx + 1}.  ${el.catagoryName}`}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'flex-end', }}>
                     <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => Delete(el._id)}>
@@ -233,6 +232,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
+    backgroundColor:'lightgray',
   },
   Input: {
     padding: 10,
@@ -241,11 +241,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
   },
+  Build:{
+      backgroundColor:'#505050',
+      paddingVertical:10,
+      paddingHorizontal:5,
+      marginVertical:5,
+      borderRadius:10,
+  },
   Title: {
     textAlign: 'center',
     marginTop: 20,
     fontSize: 20,
     fontWeight: '600',
+    
   },
   BTN: {
     backgroundColor: '#edd30b',
@@ -266,6 +274,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     marginVertical: 10,
+    color:'white',
+
   },
   BTNCR: {
     marginHorizontal: 5,
