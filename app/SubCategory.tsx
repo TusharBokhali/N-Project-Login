@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -15,6 +15,13 @@ export default function SubCategory() {
   const [Data, setData] = useState([])
   const [isLoading, setLoading] = useState(true)
 
+  useEffect(() => {
+    const Fetch = async () => {
+      await getData();
+    }
+    Fetch();
+  }, [])
+
 
   const getData = async () => {
     try {
@@ -22,28 +29,28 @@ export default function SubCategory() {
       const Data = JSON.parse(pro);
 
       if (Data) {
-        setUser(Data)
+        setUser(Data.token)
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-
-
-
+  useEffect(() => {
+    GetSubCategory();
+  }, [user, Data])
   const SubCategory = () => {
+
     try {
       axios.post('https://interviewhub-3ro7.onrender.com/subcatagory/create', {
         "subCatagoryname": cate,
       }, {
         'headers': {
-          "Authorization": user.token,
+          "Authorization": user,
         }
       }).then((res) => {
         Alert.alert('Category Added!');
         setCate('')
-        getData();
       }).catch((e) => {
         console.log(e);
         Alert.alert('Already Category Added!')
@@ -52,20 +59,20 @@ export default function SubCategory() {
       console.log(error);
 
     }
-
   }
 
-  const GetSubCategory = () => {
+  const GetSubCategory = async () => {
 
-    console.log(user);
 
+    // console.log("user token ", user.token);
     try {
-      axios.get('https://interviewhub-3ro7.onrender.com/subcatagory/', {
+      await axios.get('https://interviewhub-3ro7.onrender.com/subcatagory/', {
         'headers': {
-          "Authorization": user.token
+          "Authorization": user
         }
       })
         .then((res) => {
+
           setData(res.data.data)
           setLoading(false)
         }).catch((e) => {
@@ -76,38 +83,35 @@ export default function SubCategory() {
     }
   }
 
-
-  useEffect(() => {
-    getData();
-  }, [Data])
-  useEffect(() => {
-    GetSubCategory();
-  }, [])
-
-
   return (
     <View style={styles.container}>
       {
         isLoading ? (
           <Loading />)
           : (
-            Data.map((e, inx) => {
-              return (
-                <Text key={inx}>{e.subCatagoryname}</Text>
+            <ScrollView>{
+              Data.map((e, inx) => {
+                return (
+                  <Text key={inx}>{e.subCatagoryname}</Text>
 
-              )
-            })
-
+                )
+              })
+            }
+            </ScrollView>
           )
 
       }
-      <View style={{ flex: 1, justifyContent: 'center', }}>
-        <TextInput placeholder='Enter The SubCategory' style={styles.Input} value={cate} onChangeText={setCate} />
-        <TouchableOpacity style={styles.BTN} onPress={() => SubCategory()}>
-          <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center' }}>Add</Text>
-        </TouchableOpacity>
+      <ScrollView>
 
-      </View>
+        <View style={{ flex: 1, justifyContent: 'center', }}>
+          <TextInput placeholder='Enter The SubCategory' style={styles.Input} value={cate} onChangeText={setCate} />
+          <TouchableOpacity style={styles.BTN} onPress={() => SubCategory()}>
+            <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center' }}>Add</Text>
+          </TouchableOpacity>
+
+        </View>
+      </ScrollView>
+
     </View>
   );
 }

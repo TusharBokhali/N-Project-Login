@@ -8,6 +8,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import Loading from './Loading';
 import Dialog from 'react-native-dialog';
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 export default function Category() {
 
   const [data, setData] = useState("");
@@ -20,31 +22,65 @@ export default function Category() {
   const [categorys, setCategorys] = useState('');
   const [New, setNew] = useState('')
   const [editId, setEditId] = useState(null)
+  const [value, setValue] = useState(null);
+
+  // const pro = AsyncStorage.getItem('User');
+  // // const Data = JSON.parse(pro || "");
+  // console.log("Data ===> ", pro);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getData();
+    };
+
+    fetchData();
+  }, []);
+
+  // useEffect(() => {
+  //   getData();
+  //   getInfo()
+  // }, [])
+
   const getData = async () => {
     try {
       const pro = await AsyncStorage.getItem('User');
-      const Data = JSON.parse(pro || "");
-      if (Data) {
 
-        setData(Data)
+      const Data = JSON.parse(pro || "");
+
+
+      if (Data) {
+        setData(Data.token)
+
       }
     } catch (error) {
       console.log(error)
     }
   }
 
+
+  useEffect(() => {
+    if (data) {
+      getInfo();
+    }
+  }, [data]);
+  // console.log("tokentokentokentokentoken ==> ", data);
+
+
   const getInfo = async () => {
+
+
+    // getData() 
     try {
       await axios.get('https://interviewhub-3ro7.onrender.com/catagory/', {
         'headers': {
-          "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3M2FjODRkOGI0YmZjNWIxYmRhODRlYSIsImlhdCI6MTczMjAwNzUwN30.BFQ3pbZhffqm516GeDGyPODxUUpKafMq721K-hKrKCQ",
+          "Authorization": data,
         }
       })
         .then((res) => {
           if (res.data) {
+
             // console.log(res.data.data);
             let set = res.data.data;
-
             setFinal(set)
             setLoading(false)
           }
@@ -56,20 +92,17 @@ export default function Category() {
     }
   }
 
-  useEffect(() => {
-    getData();
-    getInfo();
-  }, [])
+
 
   const Categories = async () => {
 
-    
+
     try {
       axios.post('https://interviewhub-3ro7.onrender.com/catagory/create', {
         "catagoryName": New
       }, {
         'headers': {
-          "Authorization": data.token,
+          "Authorization": data,
         }
       }).then((res => {
         if (res.data) {
@@ -101,7 +134,7 @@ export default function Category() {
     try {
       axios.delete(`https://interviewhub-3ro7.onrender.com/catagory/${id}`, {
         'headers': {
-          "Authorization": data.token,
+          "Authorization": data,
         }
       })
         .then((res) => {
@@ -124,7 +157,7 @@ export default function Category() {
           // "status": "off"
         }, {
           'headers': {
-            "Authorization": data.token,
+            "Authorization": data,
           }
         })
           .then((res) => {
@@ -179,7 +212,7 @@ export default function Category() {
             }).map((el, inx) => {
 
               return (
-                <View key={inx} style={[styles.Build,{ flexDirection: 'row', width: '99%', justifyContent: 'space-between', alignItems: 'center', }]}>
+                <View key={inx} style={[styles.Build, { flexDirection: 'row', width: '99%', justifyContent: 'space-between', alignItems: 'center', }]}>
                   <Text style={styles.TextCate}>{`${inx + 1}.  ${el.catagoryName}`}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'flex-end', }}>
                     <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => Delete(el._id)}>
@@ -189,10 +222,6 @@ export default function Category() {
                       <Text style={{ color: 'white', }}>Update</Text>
                     </TouchableOpacity>
                   </View>
-
-
-
-
                 </View>
 
               )
@@ -206,6 +235,36 @@ export default function Category() {
 
           }
 
+          {/* <Dropdown
+            style={[styles.dropdown, { borderColor: 'blue' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={final}
+            search
+            maxHeight={300}
+            // labelField="label"
+            // valueField="value"
+            placeholder={value !== null ? value : 'Select item'}
+            searchPlaceholder="Search..."
+            value={value}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
+            onChange={async (item) => {
+              console.log(item);
+              await AsyncStorage.setItem('CategoryId', JSON.stringify(item._id));
+              setValue(item);
+
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                // color={isFocus ? 'blue' : 'black'}
+                name="Safety"
+                size={20} />
+            )} labelField={'catagoryName'} valueField={'_id'} /> */}
+
           <Dialog.Container visible={dialogVisible}>
             <Dialog.Title>Update Category</Dialog.Title>
             <Dialog.Input
@@ -216,12 +275,6 @@ export default function Category() {
             <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
             <Dialog.Button label="Save" onPress={() => Updates()} />
           </Dialog.Container>
-
-
-
-
-
-
         </View>
       </ScrollView>
     </View>
@@ -232,7 +285,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor:'lightgray',
+    backgroundColor: 'lightgray',
   },
   Input: {
     padding: 10,
@@ -241,19 +294,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
   },
-  Build:{
-      backgroundColor:'#505050',
-      paddingVertical:10,
-      paddingHorizontal:5,
-      marginVertical:5,
-      borderRadius:10,
+  Build: {
+    backgroundColor: '#505050',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    marginVertical: 5,
+    borderRadius: 10,
   },
   Title: {
     textAlign: 'center',
     marginTop: 20,
     fontSize: 20,
     fontWeight: '600',
-    
+
   },
   BTN: {
     backgroundColor: '#edd30b',
@@ -274,7 +327,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     marginVertical: 10,
-    color:'white',
+    color: 'white',
 
   },
   BTNCR: {
@@ -282,5 +335,39 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 8,
     borderRadius: 5,
-  }
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    width: '100%',
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
 })
