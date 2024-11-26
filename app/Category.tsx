@@ -10,6 +10,8 @@ import Loading from './Loading';
 import Dialog from 'react-native-dialog';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useIsFocused } from '@react-navigation/native';
+
 export default function Category() {
 
   const [data, setData] = useState("");
@@ -23,6 +25,7 @@ export default function Category() {
   const [New, setNew] = useState('')
   const [editId, setEditId] = useState(null)
   const [value, setValue] = useState(null);
+  const isFocused = useIsFocused();
 
   // const pro = AsyncStorage.getItem('User');
   // // const Data = JSON.parse(pro || "");
@@ -78,10 +81,7 @@ export default function Category() {
       })
         .then((res) => {
           if (res.data) {
-
-            // console.log(res.data.data);
-            let set = res.data.data;
-            setFinal(set)
+            setFinal(res.data.data)
             setLoading(false)
           }
 
@@ -201,7 +201,7 @@ export default function Category() {
         </TouchableOpacity>
       </View>
       <ScrollView>
-        <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+        <View style={{justifyContent: 'center', alignItems: 'center', }}>
 
           {
             isLoading ? (
@@ -226,7 +226,7 @@ export default function Category() {
 
               )
             })) : (
-              <View style={{ width: '98%', height: '80%', justifyContent: 'center', alignItems: 'center', }}>
+              <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', }}>
                 <Text>No data found!</Text>
               </View>
             )

@@ -19,11 +19,11 @@ const Home = () => {
   const Drawer = createDrawerNavigator();
   return (
       <Drawer.Navigator>
-      <Drawer.Screen name='Home' component={ProfileInfo}/>
       <Drawer.Screen name='Category' component={Category}/>
       <Drawer.Screen name='SubCategory' component={SubCategory}/>
       <Drawer.Screen name='Add Question' component={Addquestion}/>
       <Drawer.Screen name='Questionans' component={Questionans}/>
+      <Drawer.Screen name='Profile' component={ProfileInfo}/>
       
    </Drawer.Navigator>
   )

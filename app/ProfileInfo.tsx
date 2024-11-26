@@ -39,9 +39,16 @@ export default function ProfileInfo() {
           ):''}
           
           <TextInput value={`Password: ******`} style={styles.Input}/>
+          <View style={{flexDirection:'row',justifyContent:'space-around',}}>
+
           <TouchableOpacity style={styles.BTN}>
             <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Edit</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.BTN}>
+            <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Log Out</Text>
+          </TouchableOpacity>
+          </View>
       </View>
       
     </View>
@@ -61,5 +68,7 @@ const styles = StyleSheet.create({
     paddingVertical:15,
     borderRadius:15,
     marginTop:20,
+    width:'45%',
+    marginHorizontal:10,
   }
 })
