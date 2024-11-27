@@ -30,6 +30,7 @@ export default function RootLayout() {
 
 
   return (
+    
     <NavigationContainer independent={true}>
       <StatusBar style='auto' />
       <Stack.Navigator initialRouteName={'Welcome'}>

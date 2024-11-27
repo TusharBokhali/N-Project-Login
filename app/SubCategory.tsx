@@ -7,12 +7,13 @@ import axios from 'axios';
 import Loading from './Loading';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 
+
 export default function SubCategory() {
   const [value, setValue] = useState("");
-  // const [isFocus, setIsFocus] = useState(false);
   const [cate, setCate] = useState('')
   const [user, setUser] = useState('')
   const [Data, setData] = useState([])
@@ -55,8 +56,6 @@ export default function SubCategory() {
   // }, [])
 
   const SubCategory = (Id: any) => {
-    console.log(Id !== null && cate !== "");
-
     if (Id !== null && cate !== "" && value!="") {
       try {
         axios.post('https://interviewhub-3ro7.onrender.com/subcatagory/create', {
@@ -132,8 +131,6 @@ export default function SubCategory() {
         .then((res) => {
           if (res.data) {
             Alert.alert('Successfully Updated!')
-            console.log(res.data);
-
             setNew('')
             setCheck(false)
             GetSubCategory();
@@ -224,15 +221,17 @@ export default function SubCategory() {
                   <View key={inx} style={[styles.Build, { flexDirection: 'row', width: '99%', justifyContent: 'space-between', alignItems: 'center', }]}>
                     <Text style={styles.TextCate}>{`${inx + 1}.  ${e.subCatagoryname}`}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', }}>
-                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => deletes(e._id)}>
-                        <Text style={{ color: 'white', }}>Delete</Text>
+                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: '#ff0000f0', }]} onPress={() => deletes(e._id)}>
+                        {/* <Text style={{ color: 'white', }}>Delete</Text> */}
+                        <MaterialCommunityIcons name="delete" size={18} color="black" />
                       </TouchableOpacity>
-                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'green', }]} onPress={() => {
+                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: '#07ff07', }]} onPress={() => {
                         setCheck(true)
                         setId(e._id)
                         setNew(e.subCatagoryname)
                       }}>
-                        <Text style={{ color: 'white', }}>Update</Text>
+                        {/* <Text style={{ color: 'white', }}>Update</Text> */}
+                        <AntDesign name="edit" size={18} color="black" />
                       </TouchableOpacity>
                       <Dialog.Container visible={check}>
                         <Dialog.Title>Add Category</Dialog.Title>

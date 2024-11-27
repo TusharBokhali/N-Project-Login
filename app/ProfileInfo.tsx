@@ -17,7 +17,6 @@ export default function ProfileInfo() {
        const pro = await AsyncStorage.getItem('User');
        const Data = JSON.parse(pro );
        if(Data){
-          
          setData(Data)
         }
     } catch (error) {
@@ -31,15 +30,14 @@ export default function ProfileInfo() {
   },[])
 
   const LogOut = () =>{
-    // const check = Alert.prompt('Logout Account sure!')
     Alert.alert('Log Out', 'Sure Logout Account!', [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => {
-        AsyncStorage.clear();
+      {text: 'OK', onPress: async() => {
+        await AsyncStorage.clear();
         navigation.navigate('Login');
       }},
     ]);

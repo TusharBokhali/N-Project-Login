@@ -11,6 +11,7 @@ import Dialog from 'react-native-dialog';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useIsFocused } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Category() {
 
@@ -217,10 +218,12 @@ export default function Category() {
                   <Text style={styles.TextCate}>{`${inx + 1}.  ${el.catagoryName}`}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'flex-end', }}>
                     <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => Delete(el._id)}>
-                      <Text style={{ color: 'white', }}>Delete</Text>
+                      {/* <Text style={{ color: 'white', }}>Delete</Text> */}
+                      <MaterialCommunityIcons name="delete" size={18} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'green', }]} onPress={() => checkFunction(el)}>
-                      <Text style={{ color: 'white', }}>Update</Text>
+                    <TouchableOpacity style={[styles.BTNCR, { backgroundColor: '#02fc02', }]} onPress={() => checkFunction(el)}>
+                      {/* <Text style={{ color: 'white', }}>Update</Text> */}
+                      <AntDesign name="edit" size={18} color="black" />
                     </TouchableOpacity>
                   </View>
                 </View>

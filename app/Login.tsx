@@ -51,7 +51,7 @@ const Login = () => {
         <View style={styles.Back}>
             <SafeAreaView style={styles.Back}>
                 <View>
-                    <TouchableOpacity style={styles.BackBtn} onPress={() => { navigation.goBack() }}>
+                    <TouchableOpacity style={styles.BackBtn} onPress={() => { navigation.navigate('Welcome') }}>
                         <AntDesign name="arrowleft" size={24} color="black" style={{textAlign:'center',}}/>
                     </TouchableOpacity>
                     <View style={tw`flex-row justify-center`}>

@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Animated, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Dialog from 'react-native-dialog';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler';
+import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Dropdown } from 'react-native-element-dropdown';
+import Entypo from '@expo/vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Loading from './Loading';
@@ -22,17 +23,22 @@ export default function Questionans() {
   const [Data, setData] = useState([])
   const [isLoading, setLoading] = useState(true)
   const [getQuestion, setGetquestion] = useState([])
+  const [choice,setChoice] = useState('')
+  const [on,off] = useState(false)
+const [animation] = useState(new Animated.Value(0));
 
   useEffect(() => {
     const Fetch = async () => {
       await getData();
+      GetSubCategory();
       getAllQuestion();
     }
     Fetch();
   }, [])
   useEffect(() => {
-    GetSubCategory();
     getAllQuestion();
+    GetSubCategory();
+    getInfo();
   }, [user])
 
   const getData = async () => {
@@ -97,9 +103,6 @@ export default function Questionans() {
   }
 
   const getAllQuestion = async () => {
-
-    console.log("users ", user);
-
     try {
       axios.get('https://interviewhub-3ro7.onrender.com/questions/', {
         'headers': {
@@ -107,10 +110,8 @@ export default function Questionans() {
         }
       }).then((res) => {
         if (res.data) {
-          console.log("Collection Data ", res.data.data);
           setGetquestion(res.data.data)
           setLoading(false)
-          setAdd(false)
         }
       })
     } catch (error) {
@@ -118,26 +119,125 @@ export default function Questionans() {
     }
   }
 
+  const deletes = (Id: any) => {
+    try {
+      axios.delete(`https://interviewhub-3ro7.onrender.com/questions/${Id}`, {
+        'headers': {
+          "Authorization": user
+        }
+      }).then((res) => {
+        Alert.alert('Questions Successfully Delete!');
+        getAllQuestion();
+      }).catch((e) => {
+        console.log(e);
+        Alert.alert('Question Already Delete!');
+      })
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+  const onCheck = (change:any) =>{
+    setCheck(true);
+    // console.log(change);
+    
+    setId(change._id)
+    // console.log(change._id);
+    
+    setNew(change.subcatagoryID.catagoryID.catagoryName)
+    // console.log(change.subcatagoryID.catagoryID.catagoryName);
+  }
+  const getInfo = async () => {
+    try {
+      await axios.get('https://interviewhub-3ro7.onrender.com/catagory/', {
+        'headers': {
+          "Authorization": user,
+        }
+      })
+        .then((res) => {
+          if (res.data) {      
+            setCategories(res.data.data)
+            setValue('')
+            getAllQuestion();
+          }
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const UpdateQ = ()=>{
+    try {
+      axios.patch(`https://interviewhub-3ro7.onrender.com/questions/${id}`,{
+            "catagoryName" : choice.catagoryName,
+      },{
+        'headers':{
+          'Authorization':user
+        }
+      }).then((res)=>{
+        if(res.data){
+          Alert.alert('SubCategory Update!')
+          setId(null)
+          setCheck(false)
+          setNew('')
+          getAllQuestion();
+        }
+      }).catch((e)=>{
+        Alert.alert(`${choice.catagoryName} Category Already Set!`)
+      })
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+  }
+
+  const Changes = () =>{
+      if(!on){
+        Animated.timing(animation,{
+          toValue:1,
+          duration:100,
+          useNativeDriver:false
+        }).start()
+      }else{
+        Animated.timing(animation,{
+          toValue:0,
+          duration:100,
+          useNativeDriver:false
+        }).start()
+      }
+      off(!on)
+  }
+
+
+  const heightAnimation = animation.interpolate({
+    inputRange: [0, 0],
+    outputRange: [0,[getQuestion.answer / 2.66] *100]
+  });
   return (
     <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-        <View style={{ width: '90%', }}>
+        <View style={{ width: '85%', }}>
           <TextInput value={search} onChangeText={setSearch} placeholder='Search' style={styles.Search} />
         </View>
         <TouchableOpacity style={{ marginTop: 3, marginLeft: 8, }} onPress={() => setAdd(true)}>
           <MaterialIcons name="add" size={24} color="white" style={{ backgroundColor: 'black', padding: 5, borderRadius: 8, }} />
           <Dialog.Container visible={Add}>
-            <Dialog.Title>Add Question</Dialog.Title>
+            <Dialog.Title style={{color:'black',}}>Add Question</Dialog.Title>
             <Dialog.Input
               placeholder='Enter Question'
               value={question}
               onChangeText={setQuestion}
+              style={{color:'black',}}
             />
             <Dialog.Input
               placeholder='Enter Answer'
               value={answer}
               onChangeText={setAnswer}
               maxLength={500}
+              style={{color:'black',}}
             />
             <Dropdown
               style={[styles.dropdown, { borderColor: 'blue' }]}
@@ -174,37 +274,73 @@ export default function Questionans() {
               <Loading />
             ) : (
               getQuestion.map((e, inx) => {
-                console.log(e);
-
                 return (
-                  <View key={inx} style={[styles.Build, { flexDirection: 'row', width: '99%', justifyContent: 'space-between', alignItems: 'center', }]}>
+                  <View key={inx}>
+                    {/* chevron-down */}
+                  <TouchableWithoutFeedback onPress={Changes}>
+                  {/* chevron-small-down */}
+                  <View key={inx} style={[styles.Build, { flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignItems: 'center', paddingRight:28,}]}>
                     <Text style={styles.TextCate}>{`${inx + 1}.${e.questions}`}</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', }}>
-                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => deletes(e._id)}>
-                        <Text style={{ color: 'white', }}>Delete</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                      <TouchableOpacity style={[styles.BTNCR]} >
+                      <Feather name={on ? 'chevron-down' : 'chevron-right'} size={18} color="white" />
                       </TouchableOpacity>
-                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'green', }]} >
-                        <Text style={{ color: 'white', }}>Update</Text>
+                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => deletes(e._id)}>
+                        {/* <Text style={{ color: 'white', }}>Delete</Text> */}
+                        <MaterialCommunityIcons name="delete" size={18} color="white" />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: '#01fa01', }]} onPress={()=>onCheck(e)}>
+                        <AntDesign name="edit" size={18} color="black" />
                       </TouchableOpacity>
                       <Dialog.Container visible={check}>
-                        <Dialog.Title>Add Category</Dialog.Title>
+                        <Dialog.Title>Question Category Update</Dialog.Title>
                         <Dialog.Input
                           placeholder="Enter category"
-                          value={New}
+                          value={value!=="" ? value : choice.catagoryName!=="" ? choice.catagoryName : New}
                           onChangeText={setNew}
-                        />
-                        <Dialog.Button label="Cancel" onPress={() => ''} />
-                        <Dialog.Button label="Save" onPress={() => ''} />
+                          />
+                         <Dropdown
+              style={[styles.dropdown, { borderColor: 'blue' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={Categorys}
+              search
+              maxHeight={300}
+              placeholder={value !== '' ? value : 'Select Category'}
+              searchPlaceholder="Search..."
+              value={choice}
+              onChange={async (item) => {
+                
+                setChoice(item)
+              }}
+              renderLeftIcon={() => (
+                
+                <AntDesign
+                style={styles.icon}
+                name="Safety"
+                size={20} />
+              )} labelField={'catagoryName'} valueField={'_id'} />
+                        <Dialog.Button label="Cancel" onPress={() => setCheck(false)} />
+                        <Dialog.Button label="Save" onPress={() => UpdateQ()} />
                       </Dialog.Container>
 
                     </View>
                   </View>
+              </TouchableWithoutFeedback>
+              <Animated.View style={[styles.Builds,{height:heightAnimation}]}>
+                  <Text style={{color:'white',fontSize:15}}>{e.answer}</Text>
+              </Animated.View>
+              </View>
                 )
               })
 
             )
         }
       </View>
+      </ScrollView>
+
     </View>
   )
 }
@@ -274,9 +410,16 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 15,
     marginTop: 20,
+    padding:5,
   },
 
   Build: {
+    backgroundColor: '#505050',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+  },
+  Builds:{
     backgroundColor: '#505050',
     paddingVertical: 10,
     paddingHorizontal: 5,
@@ -290,26 +433,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
 
   },
-  Search: {
-    padding: 10,
-    paddingHorizontal: 8,
-    borderWidth: 1,
-    borderColor: '#bfb6b6c9',
-    borderRadius: 10,
-    marginBottom: 20,
-
-  },
   TextCate: {
     fontSize: 20,
     fontWeight: '600',
     marginVertical: 10,
     color: 'white',
-
+    width:'70%',
   },
   BTNCR: {
     marginHorizontal: 5,
     paddingVertical: 5,
-    paddingHorizontal: 8,
+    paddingHorizontal: 5,
     borderRadius: 5,
   },
 })

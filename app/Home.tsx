@@ -21,7 +21,7 @@ const Home = () => {
       <Drawer.Navigator>
       <Drawer.Screen name='Category' component={Category}/>
       <Drawer.Screen name='SubCategory' component={SubCategory}/>
-      <Drawer.Screen name='Questionans' component={Questionans}/>
+      <Drawer.Screen name='Questions' component={Questionans}/>
       <Drawer.Screen name='Profile' component={ProfileInfo}/>
       
    </Drawer.Navigator>
