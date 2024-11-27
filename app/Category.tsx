@@ -95,29 +95,33 @@ export default function Category() {
 
 
   const Categories = async () => {
+    if (New !== "") {
 
 
-    try {
-      axios.post('https://interviewhub-3ro7.onrender.com/catagory/create', {
-        "catagoryName": New
-      }, {
-        'headers': {
-          "Authorization": data,
-        }
-      }).then((res => {
-        if (res.data) {
-          Alert.alert("Successfuly Added !")
-          setNew('')
-          getInfo();
-          setAdd(false);
-        }
-      })).catch((e) => {
-        console.log(e);
-        Alert.alert('Category Already Added !')
+      try {
+        axios.post('https://interviewhub-3ro7.onrender.com/catagory/create', {
+          "catagoryName": New
+        }, {
+          'headers': {
+            "Authorization": data,
+          }
+        }).then((res => {
+          if (res.data) {
+            Alert.alert("Successfuly Added !")
+            setNew('')
+            getInfo();
+            setAdd(false);
+          }
+        })).catch((e) => {
+          console.log(e);
+          Alert.alert('Category Already Added !')
 
-      })
-    } catch (error) {
-      console.log(error)
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      Alert.alert('Enter Category!')
     }
   }
 
@@ -147,8 +151,6 @@ export default function Category() {
   }
 
   const Updates = async () => {
-    console.log("el ==> ", editId);
-    console.log("categorys ==> ", categorys);
 
     try {
       if (editId !== "") {
@@ -201,7 +203,7 @@ export default function Category() {
         </TouchableOpacity>
       </View>
       <ScrollView>
-        <View style={{justifyContent: 'center', alignItems: 'center', }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
           {
             isLoading ? (
@@ -235,35 +237,7 @@ export default function Category() {
 
           }
 
-          {/* <Dropdown
-            style={[styles.dropdown, { borderColor: 'blue' }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={final}
-            search
-            maxHeight={300}
-            // labelField="label"
-            // valueField="value"
-            placeholder={value !== null ? value : 'Select item'}
-            searchPlaceholder="Search..."
-            value={value}
-            // onFocus={() => setIsFocus(true)}
-            // onBlur={() => setIsFocus(false)}
-            onChange={async (item) => {
-              console.log(item);
-              await AsyncStorage.setItem('CategoryId', JSON.stringify(item._id));
-              setValue(item);
-
-            }}
-            renderLeftIcon={() => (
-              <AntDesign
-                style={styles.icon}
-                // color={isFocus ? 'blue' : 'black'}
-                name="Safety"
-                size={20} />
-            )} labelField={'catagoryName'} valueField={'_id'} /> */}
+  
 
           <Dialog.Container visible={dialogVisible}>
             <Dialog.Title>Update Category</Dialog.Title>

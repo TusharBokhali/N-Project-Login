@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { style } from 'twrnc'
@@ -25,6 +25,14 @@ export default function ProfileInfo() {
     getData();
   },[])
 
+  const LogOut = () =>{
+    const check = Alert.prompt('Logout Account sure!')
+    if(check){
+      console.log(check);
+      
+    }
+  }
+
   return (
     <View style={{flex:1,padding:15,}}>
      <View style={{marginTop:50,alignItems:'center'}}>
@@ -41,11 +49,8 @@ export default function ProfileInfo() {
           <TextInput value={`Password: ******`} style={styles.Input}/>
           <View style={{flexDirection:'row',justifyContent:'space-around',}}>
 
-          <TouchableOpacity style={styles.BTN}>
-            <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Edit</Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity style={styles.BTN}>
+          <TouchableOpacity style={styles.BTN} onPress={()=>{LogOut()}}>
             <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Log Out</Text>
           </TouchableOpacity>
           </View>
