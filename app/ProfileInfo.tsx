@@ -1,11 +1,15 @@
 import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import prompt from 'react-native-prompt-android';
 import { style } from 'twrnc'
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function ProfileInfo() {
 
   const [datas,setData] = useState("")
+  const navigation = useNavigation();
   
 
   const getData = async() =>{
@@ -21,17 +25,27 @@ export default function ProfileInfo() {
     }
   }
 
+
   useEffect(()=>{
     getData();
   },[])
 
   const LogOut = () =>{
-    const check = Alert.prompt('Logout Account sure!')
-    if(check){
-      console.log(check);
-      
-    }
+    // const check = Alert.prompt('Logout Account sure!')
+    Alert.alert('Log Out', 'Sure Logout Account!', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => {
+        AsyncStorage.clear();
+        navigation.navigate('Login');
+      }},
+    ]);
+ 
   }
+  
 
   return (
     <View style={{flex:1,padding:15,}}>
@@ -51,6 +65,7 @@ export default function ProfileInfo() {
 
 
           <TouchableOpacity style={styles.BTN} onPress={()=>{LogOut()}}>
+          
             <Text style={{fontSize:18,fontWeight:'600',textAlign:'center',}}>Log Out</Text>
           </TouchableOpacity>
           </View>

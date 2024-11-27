@@ -23,12 +23,8 @@ const Login = () => {
                 })
                     .then((res => {
                         if (res.data) {
-                            // console.log(res.data);
-                            
                             Alert.alert("Successfully Login");
                            
-                            
-                            alert("Successfully Login");
                             navigation.navigate('Home');
                            (async function (){
                            await AsyncStorage.setItem("User", JSON.stringify(res.data))
@@ -40,15 +36,11 @@ const Login = () => {
 
 
                     })).catch((e) => {
-                        console.log(e);
-                        alert('Account not found ! Please Create The Account !');
                         Alert.alert('Account not found ! Please Create The Account !');
 
                     })
             } else {
                 Alert.alert('Enter The email Or Password !');
-                alert('Enter The email Or Password !');
-
             }
         } catch (error) {
             console.log(error);

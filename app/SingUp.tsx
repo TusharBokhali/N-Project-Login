@@ -32,8 +32,6 @@ const SingUp = () => {
                     setpassword("")
                 }))
                 .catch((e)=>{
-                    console.log(e);
-                    alert('Already Account Created !')
                     Alert.alert('Already Account Created !')
                 })
             }else{

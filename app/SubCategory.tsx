@@ -244,6 +244,7 @@ export default function SubCategory() {
                         <Dialog.Button label="Cancel" onPress={() => setCheck(false)} />
                         <Dialog.Button label="Save" onPress={() => SubUpdate()} />
                       </Dialog.Container>
+
                     </View>
                   </View>
                 )
@@ -319,13 +320,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 20,
   },
-  Input: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#c3bdbdb1',
-    borderRadius: 10,
-    marginVertical: 10,
-  },
+ 
   Build: {
     backgroundColor: '#505050',
     paddingVertical: 10,

@@ -51,9 +51,8 @@ export default function Category() {
       const Data = JSON.parse(pro || "");
 
 
-      if (Data) {
+      if (Data.token) {
         setData(Data.token)
-
       }
     } catch (error) {
       console.log(error)
