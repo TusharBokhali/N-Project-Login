@@ -10,30 +10,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = () => {
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
+    const [loader, setLoader] = useState(false)
     const navigation = useNavigation();
 
-    const Logins = async() => {
+    const Logins = async () => {
 
         try {
             if (email !== "" && password != "") {
-
-              await  axios.post('https://interviewhub-3ro7.onrender.com/admin/login', {
+                setLoader(true)
+                await axios.post('https://interviewhub-3ro7.onrender.com/admin/login', {
                     "email": email,
                     "password": password
                 })
                     .then((res => {
                         if (res.data) {
                             Alert.alert("Successfully Login");
-                           
+
                             navigation.navigate('Home');
-                           (async function (){
-                           await AsyncStorage.setItem("User", JSON.stringify(res.data))
-                           })();
+                            (async function () {
+                                await AsyncStorage.setItem("User", JSON.stringify(res.data))
+                            })();
                             setemail("")
                             setpassword("")
 
                         }
-
+                        setLoader(false)
 
                     })).catch((e) => {
                         Alert.alert('Account not found ! Please Create The Account !');
@@ -44,6 +45,7 @@ const Login = () => {
             }
         } catch (error) {
             console.log(error);
+            setLoader(false)
         }
     }
 
@@ -52,7 +54,7 @@ const Login = () => {
             <SafeAreaView style={styles.Back}>
                 <View>
                     <TouchableOpacity style={styles.BackBtn} onPress={() => { navigation.navigate('Welcome') }}>
-                        <AntDesign name="arrowleft" size={24} color="black" style={{textAlign:'center',}}/>
+                        <AntDesign name="arrowleft" size={24} color="black" style={{ textAlign: 'center', }} />
                     </TouchableOpacity>
                     <View style={tw`flex-row justify-center`}>
                         <Image source={require('../assets/images/newcookie.png')} style={{ width: 200, height: 200 }} />
@@ -70,7 +72,7 @@ const Login = () => {
                     <TouchableOpacity style={tw`flex items-end mb-5 pr-5`}>
                         <Text style={tw`text-gray-700 `}>Forgot Passwords ?</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={tw`py-3 bg-yellow-400 rounded-xl`} onPress={() => { Logins() }}>
+                    <TouchableOpacity disabled={loader} style={tw`py-3 bg-yellow-400 rounded-xl`} onPress={() => { Logins() }}>
                         <Text style={tw`font-xl font-bold text-center text-gray-700`}>
                             Login
                         </Text>
@@ -107,7 +109,7 @@ export default Login
 
 const styles = StyleSheet.create({
     Back: {
-        flex:1,
+        flex: 1,
         backgroundColor: '#6262df',
         // paddingTop: ,
     },
@@ -120,15 +122,15 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         padding: 30,
     },
-    BackBtn:{
+    BackBtn: {
         // p-2 rounded-tr-2xl rounded-bl-2xl ml-4 w-10
-        backgroundColor:'#ffff00',
-        padding:2,
-        borderTopRightRadius:15,
-        borderBottomLeftRadius:15,
-        marginLeft:20,
+        backgroundColor: '#ffff00',
+        padding: 2,
+        borderTopRightRadius: 15,
+        borderBottomLeftRadius: 15,
+        marginLeft: 20,
         width: 40,
-        height:40,
-        justifyContent:'center',
+        height: 40,
+        justifyContent: 'center',
     }
 })

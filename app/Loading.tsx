@@ -2,6 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import LoaderKit from 'react-native-loader-kit'
 export default function Loading() {
   return (
     <SafeAreaProvider>

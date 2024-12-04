@@ -11,22 +11,26 @@ import { useIsFocused } from '@react-navigation/native';
 const Welcome = () => {
     const navigation = useNavigation()
   const isFocused = useIsFocused();
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false)
     async function Data() {
         const response = await AsyncStorage.getItem("User")
         const value = JSON.parse(response || "")
-        if (value.data) {            
+        if (value.data) {                        
             navigation.navigate('Home')
             setLoading(false)
         } else {
             setLoading(false)
+        }
+        if(value==null || value =='' || value || undefined){
+            setLoading(false)
+
         }
         // setUser(value)
     }
 
     useEffect(() => {
         Data();
-    }, [isFocused])
+    }, [])
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>

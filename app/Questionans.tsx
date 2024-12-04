@@ -23,9 +23,10 @@ export default function Questionans() {
   const [Data, setData] = useState([])
   const [isLoading, setLoading] = useState(true)
   const [getQuestion, setGetquestion] = useState([])
-  const [choice,setChoice] = useState('')
-  const [on,off] = useState(false)
-const [animation] = useState(new Animated.Value(0));
+  const [choice, setChoice] = useState('')
+  const [on, off] = useState(false)
+  const [animation] = useState(new Animated.Value(0));
+  // const [currentActivce, setCurrentActive] = useState([0,5])
 
   useEffect(() => {
     const Fetch = async () => {
@@ -138,13 +139,13 @@ const [animation] = useState(new Animated.Value(0));
     }
   }
 
-  const onCheck = (change:any) =>{
+  const onCheck = (change: any) => {
     setCheck(true);
     // console.log(change);
-    
+
     setId(change._id)
     // console.log(change._id);
-    
+
     setNew(change.subcatagoryID.catagoryID.catagoryName)
     // console.log(change.subcatagoryID.catagoryID.catagoryName);
   }
@@ -156,7 +157,7 @@ const [animation] = useState(new Animated.Value(0));
         }
       })
         .then((res) => {
-          if (res.data) {      
+          if (res.data) {
             setCategories(res.data.data)
             setValue('')
             getAllQuestion();
@@ -166,179 +167,179 @@ const [animation] = useState(new Animated.Value(0));
       console.log(error);
     }
   }
-  const UpdateQ = ()=>{
+  const UpdateQ = () => {
     try {
-      axios.patch(`https://interviewhub-3ro7.onrender.com/questions/${id}`,{
-            "catagoryName" : choice.catagoryName,
-      },{
-        'headers':{
-          'Authorization':user
+      axios.patch(`https://interviewhub-3ro7.onrender.com/questions/${id}`, {
+        "catagoryName": choice.catagoryName,
+      }, {
+        'headers': {
+          'Authorization': user
         }
-      }).then((res)=>{
-        if(res.data){
+      }).then((res) => {
+        if (res.data) {
           Alert.alert('SubCategory Update!')
           setId(null)
           setCheck(false)
           setNew('')
           getAllQuestion();
         }
-      }).catch((e)=>{
+      }).catch((e) => {
         Alert.alert(`${choice.catagoryName} Category Already Set!`)
       })
     } catch (error) {
       console.log(error);
-      
+
     }
-    
+
   }
 
-  const Changes = () =>{
-      if(!on){
-        Animated.timing(animation,{
-          toValue:1,
-          duration:100,
-          useNativeDriver:false
-        }).start()
-      }else{
-        Animated.timing(animation,{
-          toValue:0,
-          duration:100,
-          useNativeDriver:false
-        }).start()
-      }
-      off(!on)
+  const Changes = () => {
+    if (!on) {
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: false
+      }).start()
+    } else {
+      Animated.timing(animation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false
+      }).start()
+    }
+    off(!on)
   }
 
 
   const heightAnimation = animation.interpolate({
     inputRange: [0, 0],
-    outputRange: [0,[getQuestion.answer / 2.66] *100]
+    outputRange: [0, [getQuestion.answer / 2.66] * 100]
   });
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-        <View style={{ width: '85%', }}>
-          <TextInput value={search} onChangeText={setSearch} placeholder='Search' style={styles.Search} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+          <View style={{ width: '85%', }}>
+            <TextInput value={search} onChangeText={setSearch} placeholder='Search' style={styles.Search} />
+          </View>
+          <TouchableOpacity style={{ marginTop: 3, marginLeft: 8, }} onPress={() => setAdd(true)}>
+            <MaterialIcons name="add" size={24} color="white" style={{ backgroundColor: 'black', padding: 5, borderRadius: 8, }} />
+            <Dialog.Container visible={Add}>
+              <Dialog.Title style={{ color: 'black', }}>Add Question</Dialog.Title>
+              <Dialog.Input
+                placeholder='Enter Question'
+                value={question}
+                onChangeText={setQuestion}
+                style={{ color: 'black', }}
+              />
+              <Dialog.Input
+                placeholder='Enter Answer'
+                value={answer}
+                onChangeText={setAnswer}
+                maxLength={500}
+                style={{ color: 'black', }}
+              />
+              <Dropdown
+                style={[styles.dropdown, { borderColor: 'blue' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={Data}
+                search
+                maxHeight={200}
+                placeholder={value !== "" ? value : 'Select Category'}
+                searchPlaceholder="Search..."
+                value={value}
+                onChange={async (item) => {
+                  setValue(item);
+                }}
+                renderLeftIcon={() => (
+
+                  <AntDesign
+                    style={styles.icon}
+                    name="Safety"
+                    size={20} />
+                )} labelField={'subCatagoryname'} valueField={'subcatagoryID'} />
+              <Dialog.Button label="Cancel" onPress={() => setAdd(false)} />
+              <Dialog.Button label="Add" onPress={() => AddQuestion(value._id)} />
+            </Dialog.Container>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ marginTop: 3, marginLeft: 8, }} onPress={() => setAdd(true)}>
-          <MaterialIcons name="add" size={24} color="white" style={{ backgroundColor: 'black', padding: 5, borderRadius: 8, }} />
-          <Dialog.Container visible={Add}>
-            <Dialog.Title style={{color:'black',}}>Add Question</Dialog.Title>
-            <Dialog.Input
-              placeholder='Enter Question'
-              value={question}
-              onChangeText={setQuestion}
-              style={{color:'black',}}
-            />
-            <Dialog.Input
-              placeholder='Enter Answer'
-              value={answer}
-              onChangeText={setAnswer}
-              maxLength={500}
-              style={{color:'black',}}
-            />
-            <Dropdown
-              style={[styles.dropdown, { borderColor: 'blue' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={Data}
-              search
-              maxHeight={200}
-              placeholder={value !== "" ? value : 'Select Category'}
-              searchPlaceholder="Search..."
-              value={value}
-              onChange={async (item) => {
-                setValue(item);
-              }}
-              renderLeftIcon={() => (
 
-                <AntDesign
-                  style={styles.icon}
-                  name="Safety"
-                  size={20} />
-              )} labelField={'subCatagoryname'} valueField={'subcatagoryID'} />
-            <Dialog.Button label="Cancel" onPress={() => setAdd(false)} />
-            <Dialog.Button label="Add" onPress={() => AddQuestion(value._id)} />
-          </Dialog.Container>
-        </TouchableOpacity>
-      </View>
+        <View>
+          {
+            isLoading ?
+              (
+                <Loading />
+              ) : (
+                getQuestion.map((e, inx) => {
+                  return (
+                    <View key={inx}>
+                      {/* chevron-down */}
+                      <TouchableWithoutFeedback onPress={Changes}>
+                        {/* chevron-small-down */}
+                        <View key={inx} style={[styles.Build, { flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignItems: 'center', paddingRight: 28, }]}>
+                          <Text style={styles.TextCate}>{`${inx + 1}.${e.questions}`}</Text>
+                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <TouchableOpacity style={[styles.BTNCR]} >
+                              <Feather name={on ? 'chevron-down' : 'chevron-right'} size={18} color="white" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => deletes(e._id)}>
+                              {/* <Text style={{ color: 'white', }}>Delete</Text> */}
+                              <MaterialCommunityIcons name="delete" size={18} color="white" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.BTNCR, { backgroundColor: '#01fa01', }]} onPress={() => onCheck(e)}>
+                              <AntDesign name="edit" size={18} color="black" />
+                            </TouchableOpacity>
+                            <Dialog.Container visible={check}>
+                              <Dialog.Title>Question Category Update</Dialog.Title>
+                              <Dialog.Input
+                                placeholder="Enter category"
+                                value={value !== "" ? value : choice.catagoryName !== "" ? choice.catagoryName : New}
+                                onChangeText={setNew}
+                              />
+                              <Dropdown
+                                style={[styles.dropdown, { borderColor: 'blue' }]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                iconStyle={styles.iconStyle}
+                                data={Categorys}
+                                search
+                                maxHeight={300}
+                                placeholder={value !== '' ? value : 'Select Category'}
+                                searchPlaceholder="Search..."
+                                value={choice}
+                                onChange={async (item) => {
 
-      <View>
-        {
-          isLoading ?
-            (
-              <Loading />
-            ) : (
-              getQuestion.map((e, inx) => {
-                return (
-                  <View key={inx}>
-                    {/* chevron-down */}
-                  <TouchableWithoutFeedback onPress={Changes}>
-                  {/* chevron-small-down */}
-                  <View key={inx} style={[styles.Build, { flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignItems: 'center', paddingRight:28,}]}>
-                    <Text style={styles.TextCate}>{`${inx + 1}.${e.questions}`}</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                      <TouchableOpacity style={[styles.BTNCR]} >
-                      <Feather name={on ? 'chevron-down' : 'chevron-right'} size={18} color="white" />
-                      </TouchableOpacity>
-                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: 'red', }]} onPress={() => deletes(e._id)}>
-                        {/* <Text style={{ color: 'white', }}>Delete</Text> */}
-                        <MaterialCommunityIcons name="delete" size={18} color="white" />
-                      </TouchableOpacity>
-                      <TouchableOpacity style={[styles.BTNCR, { backgroundColor: '#01fa01', }]} onPress={()=>onCheck(e)}>
-                        <AntDesign name="edit" size={18} color="black" />
-                      </TouchableOpacity>
-                      <Dialog.Container visible={check}>
-                        <Dialog.Title>Question Category Update</Dialog.Title>
-                        <Dialog.Input
-                          placeholder="Enter category"
-                          value={value!=="" ? value : choice.catagoryName!=="" ? choice.catagoryName : New}
-                          onChangeText={setNew}
-                          />
-                         <Dropdown
-              style={[styles.dropdown, { borderColor: 'blue' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={Categorys}
-              search
-              maxHeight={300}
-              placeholder={value !== '' ? value : 'Select Category'}
-              searchPlaceholder="Search..."
-              value={choice}
-              onChange={async (item) => {
-                
-                setChoice(item)
-              }}
-              renderLeftIcon={() => (
-                
-                <AntDesign
-                style={styles.icon}
-                name="Safety"
-                size={20} />
-              )} labelField={'catagoryName'} valueField={'_id'} />
-                        <Dialog.Button label="Cancel" onPress={() => setCheck(false)} />
-                        <Dialog.Button label="Save" onPress={() => UpdateQ()} />
-                      </Dialog.Container>
+                                  setChoice(item)
+                                }}
+                                renderLeftIcon={() => (
 
+                                  <AntDesign
+                                    style={styles.icon}
+                                    name="Safety"
+                                    size={20} />
+                                )} labelField={'catagoryName'} valueField={'_id'} />
+                              <Dialog.Button label="Cancel" onPress={() => setCheck(false)} />
+                              <Dialog.Button label="Save" onPress={() => UpdateQ()} />
+                            </Dialog.Container>
+
+                          </View>
+                        </View>
+                      </TouchableWithoutFeedback>
+                      <Animated.View style={[styles.Builds, { height: heightAnimation }]}>
+                        <Text style={{ color: 'white', fontSize: 15 }}>{e.answer}</Text>
+                      </Animated.View>
                     </View>
-                  </View>
-              </TouchableWithoutFeedback>
-              <Animated.View style={[styles.Builds,{height:heightAnimation}]}>
-                  <Text style={{color:'white',fontSize:15}}>{e.answer}</Text>
-              </Animated.View>
-              </View>
-                )
-              })
+                  )
+                })
 
-            )
-        }
-      </View>
+              )
+          }
+        </View>
       </ScrollView>
 
     </View>
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 15,
     marginTop: 20,
-    padding:5,
+    padding: 5,
   },
 
   Build: {
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 10,
   },
-  Builds:{
+  Builds: {
     backgroundColor: '#505050',
     paddingVertical: 10,
     paddingHorizontal: 5,
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginVertical: 10,
     color: 'white',
-    width:'70%',
+    width: '70%',
   },
   BTNCR: {
     marginHorizontal: 5,
